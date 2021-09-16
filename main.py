@@ -1,61 +1,61 @@
+import os
+
 from flask import Flask
-from flask_restful import reqparse, abort, Api, Resource
 
-# user registration
-# token authentication
-# upload file
-# list files
-
-app = Flask(__name__)
-api = Api(app)
-
-TODOS = {
-    'todo1': {'task': 'build an API'},
-    'todo2': {'task': '?????'},
-    'todo3': {'task': 'profit!'},
-}
+from api.conf.config import SQLALCHEMY_DATABASE_URI
+from api.conf.routes import generate_routes
+from api.database.database import db
+from api.db_initializer.db_initializer import (create_admin_user,
+                                               create_super_admin,
+                                               create_test_user)
 
 
-def abort_if_todo_doesnt_exist(todo_id):
-    if todo_id not in TODOS:
-        abort(404, message="Todo {} doesn't exist".format(todo_id))
+def create_app():
 
-parser = reqparse.RequestParser()
-parser.add_argument('task')
+    # Create a flask app.
+    app = Flask(__name__)
 
+    # Set debug true for catching the errors.
+    app.config['DEBUG'] = True
 
-# user registration
-# takes in unique username & password
-class UserRegistration(Resource):
-    def get(self, todo_id):
-        abort_if_todo_doesnt_exist(todo_id)
-        return TODOS[todo_id]
+    # Set database url.
+    app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 
-    def delete(self, todo_id):
-        abort_if_todo_doesnt_exist(todo_id)
-        del TODOS[todo_id]
-        return '', 204
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
+    # Generate routes.
+    generate_routes(app)
 
-# TodoList
-# shows a list of all todos, and lets you POST to add new tasks
-class TodoList(Resource):
-    def get(self):
-        return TODOS
+    # Database initialize with app.
+    db.init_app(app)
 
-    def post(self):
-        args = parser.parse_args()
-        todo_id = int(max(TODOS.keys()).lstrip('todo')) + 1
-        todo_id = 'todo%i' % todo_id
-        TODOS[todo_id] = {'task': args['task']}
-        return TODOS[todo_id], 201
+    # Check if there is no database.
+    if not os.path.exists(SQLALCHEMY_DATABASE_URI):
 
-##
-## Actually setup the Api resource routing here
-##
-api.add_resource(TodoList, '/todos')
-api.add_resource(Todo, '/todos/<todo_id>')
+        # New db app if no database.
+        db.app = app
+
+        # Create all database tables.
+        db.create_all()
+
+        # Create default super admin user in database.
+        create_super_admin()
+
+        # Create default admin user in database.
+        create_admin_user()
+
+        # Create default test user in database.
+        create_test_user()
+
+    # Return app.
+    return app
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+
+    # Create app.
+    app = create_app()
+
+    # Run app. For production use another web server.
+    # Set debug and use_reloader parameters as False.
+    app.run(port=5000, debug=True, host='localhost', use_reloader=True)
