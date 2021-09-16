@@ -1,10 +1,10 @@
 # file-management-system
 
-## Problem Statement
+## Code Challenge Problem Statement
 
 A user would like to create a system that is able to save files and analyze the files’ sensitivity score. The system should allow listing the files together with each file’s sensitivity score. As the files may be sensitive, users using the system will be required to register and authenticate themselves before being able to utilise the system’s features. The sensitivity score of a file is defined in later sections.
 
-### Dathena Code Challenge
+### Task Summary
 
 You will be required to create two applications.
 
@@ -31,7 +31,43 @@ You will be required to create two applications.
   - Calculate the sensitivity score of a file
   - Update the value of the sensitivity score and last updated timestamp of the file inside the database
  
-You may choose any python web framework or database for your assignment although we prefer to have Flask / Django for web framework and Postgres as your RDBMS. Being able to Dockerize your application and launching the stack with Docker Compose will be a bonus. Make sure your code follows the OOP principles.
+You may choose any python web framework or database for your assignment although we prefer to have Flask / Django for web framework and Postgres as your RDBMS. Being able to Dockerize your application and launching the stack with Docker Compose will be a bonus. Make sure your code follows the OOP principles.  
+
+---
+
+### Calculating Sensitivity Score
+
+Given a sensitivity table:
+
+| Sensitive Word | Score |
+|----------------|-------|
+| Secret         | 10    |
+| Dathena        | 7     |
+| Internal       | 5     |
+| External       | 3     |
+| Public         | 1     |
+
+Based on the sensitivity table provided, the formula for the sensitivity score of a file is the sum of scores for every word (from the table) found in the file.
+
+Example file content:
+
+```
+This is a top secret file.
+
+All these information are not meant to be external purposes.
+
+Regards,
+Joker.
+Dathena
+```
+
+In this case, the sensitivity score for this document should be calculated as:
+
+```
+Sensitive words found = (Secret: 10), (external: 3), (Dathena: 7)
+
+Total sensitivity score = 10 + 3 + 7 = 20
+```
 
 ## Getting Started
 
