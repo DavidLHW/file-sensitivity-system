@@ -5,7 +5,7 @@ from flask import Flask
 from api.conf.config import SQLALCHEMY_DATABASE_URI
 from api.conf.routes import generate_routes
 from api.database.database import db
-from api.db_initializer.db_initializer import (create_admin_user,
+from api.db_initialiser.db_initialiser import (create_admin_user,
                                                create_super_admin,
                                                create_test_user)
 
