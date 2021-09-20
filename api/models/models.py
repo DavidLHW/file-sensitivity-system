@@ -2,32 +2,36 @@ from datetime import datetime
 
 from flask import g
 
+from sqlalchemy import Column, Integer, String, Float, DateTime
+from sqlalchemy.ext.declarative import declarative_base
+
 from api.conf.auth import auth, jwt
-from api.database.database import db
 
+# Create sql alchemy database object.
+Base = declarative_base()
 
-class User(db.Model):
+class User(Base):
 
-    # Generates default class name for table. For changing use
-    # __tablename__ = 'users'
+    # Generates default class name for table.
+    __tablename__ = 'users'
 
     # User id.
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
 
     # User name.
-    username = db.Column(db.String(length=80))
+    username = Column(String(length=80))
 
     # User password.
-    password = db.Column(db.String(length=80))
+    password = Column(String(length=80))
 
     # User email address.
-    email = db.Column(db.String(length=80))
+    email = Column(String(length=80))
 
     # Creation time for user.
-    created = db.Column(db.DateTime, default=datetime.utcnow)
+    created = Column(DateTime, default=datetime.utcnow)
 
     # Unless otherwise stated default role is user.
-    user_role = db.Column(db.String, default="user")
+    user_role = Column(String, default="user")
 
     # Generates auth token.
     def generate_auth_token(self, permission_level):
@@ -86,7 +90,7 @@ class User(db.Model):
 
     def __repr__(self):
 
-        # This is only for representation how you want to see user information after query.
+        # This is only for representation to see after query.
         return "<User(id='%s', name='%s', password='%s', email='%s', created='%s')>" % (
             self.id,
             self.username,
@@ -96,16 +100,16 @@ class User(db.Model):
         )
 
 
-class Blacklist(db.Model):
+class Blacklist(Base):
 
-    # Generates default class name for table. For changing use
-    # __tablename__ = 'users'
+    # Generates default class name for table.
+    __tablename__ = 'blacklist'
 
     # Blacklist id.
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
 
     # Blacklist invalidated refresh tokens.
-    refresh_token = db.Column(db.String(length=255))
+    refresh_token = Column(String(length=255))
 
     def __repr__(self):
 
@@ -113,4 +117,66 @@ class Blacklist(db.Model):
         return "<User(id='%s', refresh_token='%s', status='invalidated.')>" % (
             self.id,
             self.refresh_token,
+        )
+
+
+class File(Base):
+
+    # Generates default class name for table.
+    __tablename__ = 'files'
+
+    # User id.
+    id = Column(Integer, primary_key=True)
+
+    # File name.
+    name = Column(String(length=80))
+
+    # File size.
+    size = Column(Float())
+
+    # File path.
+    path = Column(String(length=80))
+
+    # Uploaded time for file.
+    uploaded = Column(DateTime, default=datetime.utcnow)
+
+    @staticmethod
+    @auth.verify_token
+    def verify_auth_token(token):
+
+        # Create a global none user.
+        g.user = None
+
+        try:
+            # Load token.
+            data = jwt.loads(token)
+
+        except:
+            # If any error return false.
+            return False
+
+        # Check if email and admin permission variables are in jwt.
+        if "email" and "admin" in data:
+
+            # Set email from jwt.
+            g.user = data["email"]
+
+            # Set admin permission from jwt.
+            g.admin = data["admin"]
+
+            # Return true.
+            return True
+
+        # If does not verified, return false.
+        return False
+
+    def __repr__(self):
+
+        # This is only for representation how you want to see after query.
+        return "<File(id='%s', name='%s', size='%s', path='%s', uploaded='%s')>" % (
+            self.id,
+            self.name,
+            self.size,
+            self.path,
+            self.uploaded,
         )
