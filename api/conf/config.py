@@ -1,6 +1,3 @@
-import os
+# Scheme: "postgres+psycopg2://<USERNAME>:<PASSWORD>@<IP_ADDRESS>:<PORT>/<DATABASE_NAME>"
 
-basedir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-
-# Create a database in project and get it's path.
-SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, "test.db")
+DATABASE_URI = "postgresql://postgres:Dd123456@localhost/file_sensitivity_system_db"
