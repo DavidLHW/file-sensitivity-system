@@ -2,7 +2,7 @@ from datetime import datetime
 
 from flask import g
 
-from sqlalchemy import Column, Integer, String, Float, DateTime
+from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 
 from api.conf.auth import auth, jwt
@@ -107,13 +107,13 @@ class File(Base):
     id = Column(Integer, primary_key=True)
 
     # File name.
-    name = Column(String(length=80))
+    filename = Column(String(length=80))
 
-    # File size.
-    size = Column(Float())
+    # File size in bytes.
+    filesize = Column(Integer())
 
     # File path.
-    path = Column(String(length=80))
+    filepath = Column(String())
 
     # Uploaded time for file.
     uploaded = Column(DateTime, default=datetime.utcnow)
@@ -150,8 +150,8 @@ class File(Base):
         # This is only for representation how you want to see after query.
         return "<File(id='%s', name='%s', size='%s', path='%s', uploaded='%s')>" % (
             self.id,
-            self.name,
-            self.size,
-            self.path,
+            self.filename,
+            self.filesize,
+            self.filepath,
             self.uploaded,
         )
