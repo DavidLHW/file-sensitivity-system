@@ -2,7 +2,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from api.conf.config import DATABASE_URI
-from api.models.models import Base
 
 
 # Engine object.

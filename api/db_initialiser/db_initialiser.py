@@ -1,6 +1,7 @@
 import logging
 
-from api.database.database import db_session, Base, engine
+from api.models.models import Base
+from api.database.database import db_session, engine
 from api.models.models import User, File
 
 
@@ -26,8 +27,7 @@ def initialise_database(
 def create_test_user(
     username="test_username",
     password="test_password",
-    email="test_email@example.com",
-    user_role="user",
+    email="test_email@example.com"
 ):
     # Check if admin is existed in db.
     user = db_session.query(User).filter_by(email=email).first()
@@ -36,14 +36,11 @@ def create_test_user(
 
     # If user is none.
     if user is None:
-
-        # Create admin user if it does not existed.
-        # user = User(username=username, password=password, email=email, user_role=user_role)
+        # Create user if it does not exists.
         user = User(
             username=username,
             password=password,
-            email=email,
-            user_role=user_role,
+            email=email
         )
 
         # Add user to session.
@@ -80,8 +77,7 @@ def create_test_file(
     # If user is none.
     if file is None:
 
-        # Create admin user if it does not existed.
-        # user = User(username=username, password=password, email=email, user_role=user_role)
+        # Create File if it does not exist.
         file = File(
             filename=filename,
             filesize=filesize,
