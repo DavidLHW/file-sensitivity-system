@@ -5,7 +5,7 @@ from flask import Flask
 # from api.conf.config import SQLALCHEMY_DATABASE_URI
 from api.conf.routes import generate_routes
 from api.database.database import create_database, recreate_database
-from api.db_initialiser.db_initialiser import create_test_user
+from api.db_initialiser.db_initialiser import create_test_user, create_test_file
 
 
 def create_app():
@@ -41,6 +41,9 @@ def create_app():
 
     # Create default test user in database.
     create_test_user()
+
+    # Create default test file in database.
+    create_test_file()
 
     # Return app.
     return app
