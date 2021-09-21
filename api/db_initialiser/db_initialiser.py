@@ -52,7 +52,7 @@ def create_test_user(
     db_session.close()
 
 
-def create_test_user(
+def create_test_file(
     filename="test_file",
     filesize=1024,
     filepath="path/to/file/text.txt"
