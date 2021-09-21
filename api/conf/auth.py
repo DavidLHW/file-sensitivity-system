@@ -5,7 +5,7 @@ from flask_httpauth import HTTPTokenAuth
 jwt = JsonWebToken("secret", expires_in=3600)
 
 # Refresh token creation.
-refresh_jwt = JsonWebToken("secret2", expires_in=7200)
+refresh_jwt = JsonWebToken("refresh_secret", expires_in=7200)
 
 # Auth object creation.
 auth = HTTPTokenAuth("Bearer")
