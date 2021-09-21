@@ -50,16 +50,25 @@ class Register(Resource):
             return error.ALREADY_EXIST
 
         # Create a new user.
-        user = User(username=username, password=password, email=email)
+        user = User(
+                username=username,
+                password=password,
+                email=email)
 
-        # Add user to session.
-        db_session.add(user)
+        try:
+            # Add user to session.
+            db_session.add(user)
 
-        # Commit session.
-        db_session.commit()
+            # Commit session.
+            db_session.commit()
 
-        # Close DB session to prevent memory leaks.
-        db_session.close()
+            # Close DB session to prevent memory leaks.
+            db_session.close()
+
+        except Exception as why:
+            # Log the error.
+            logging.error(why)
+            return error.INVALID_INPUT_422
 
         # Return success if registration is completed.
         return {"status": "registration completed."}
@@ -101,25 +110,9 @@ class Login(Resource):
         if user is None:
             return error.UNAUTHORIZED
 
-        if user.user_role == "user":
-
-            # Generate access token. This method takes boolean value for checking admin or normal user. Admin: 1 or 0.
-            access_token = user.generate_auth_token(0)
-
-        # If user is admin.
-        elif user.user_role == "admin":
-
-            # Generate access token. This method takes boolean value for checking admin or normal user. Admin: 1 or 0.
-            access_token = user.generate_auth_token(1)
-
-        # If user is super admin.
-        elif user.user_role == "sa":
-
-            # Generate access token. This method takes boolean value for checking admin or normal user. Admin: 2, 1, 0.
-            access_token = user.generate_auth_token(2)
-
         else:
-            return error.INVALID_INPUT_422
+            # Generate access token. This method takes boolean value for checking admin or normal user. Admin: 1 or 0.
+            access_token = user.generate_auth_token()
 
         # Generate refresh token.
         refresh_token = refresh_jwt.dumps({"email": email})
@@ -202,7 +195,7 @@ class RefreshToken(Resource):
         user = User(email=data["email"])
 
         # New token generate.
-        token = user.generate_auth_token(False)
+        token = user.generate_auth_token()
 
         # Return new access token.
         return {"access_token": token}
