@@ -30,9 +30,6 @@ class User(Base):
     # Creation time for user.
     created = Column(DateTime, default=datetime.utcnow)
 
-    # Unless otherwise stated default role is user.
-    user_role = Column(String, default="user")
-
     # Generates auth token.
     def generate_auth_token(self):
         # Return normal user flag.
