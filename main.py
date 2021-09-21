@@ -4,7 +4,7 @@ from flask import Flask
 
 # from api.conf.config import SQLALCHEMY_DATABASE_URI
 from api.conf.routes import generate_routes
-from api.database.database import create_database, recreate_database
+from api.database.database import initialise_database
 from api.db_initialiser.db_initialiser import create_test_user, create_test_file
 
 
@@ -37,7 +37,7 @@ def create_app():
     generate_routes(app)
 
     # Create and initialise database if database don't already exist
-    create_database()
+    initialise_database()
 
     # Create default test user in database.
     create_test_user()
