@@ -35,7 +35,14 @@ class UploadFile(Resource):
         uploaded_file.seek(0, os.SEEK_END)
         file_length = uploaded_file.tell()
         uploaded_file.seek(0, 0)
-        file_size = str(round(file_length / (1024 * 1024), 2)) + "MB"
+
+        suffixes=['B','kB','MB']
+        suffixIndex = 0
+        while file_length > 1024 and suffixIndex < len(suffixes)-1:
+            suffixIndex += 1 #increment the index of the suffix
+            file_length = file_length/1024.0 #apply the division
+
+        file_size = "%.*f %s"%(1, file_length, suffixes[suffixIndex])
 
         # save file
         upload_folder = current_app.config['UPLOAD_FOLDER']
