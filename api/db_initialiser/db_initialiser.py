@@ -1,7 +1,26 @@
 import logging
 
-from api.database.database import db_session
+from api.database.database import db_session, Base, engine
 from api.models.models import User, File
+
+
+def initialise_database(
+    email="test_email@example.com",
+    filepath="path/to/file/text.txt"
+):
+    # Check if admin is existed in db.
+    user = db_session.query(User).filter_by(email=email).first()
+
+    # Check if admin is existed in db.
+    file = db_session.query(File).filter_by(filepath=filepath).first()
+
+    if user and file:
+        Base.metadata.drop_all(engine)
+        Base.metadata.create_all(engine)
+    
+    else:
+        Base.metadata.create_all(engine)
+
 
 
 def create_test_user(
@@ -10,10 +29,6 @@ def create_test_user(
     email="test_email@example.com",
     user_role="user",
 ):
-
-    # # Initialise DB session.
-    # db_session = Session()
-
     # Check if admin is existed in db.
     user = db_session.query(User).filter_by(email=email).first()
 
@@ -57,10 +72,6 @@ def create_test_file(
     filesize=1024,
     filepath="path/to/file/text.txt"
 ):
-
-    # # Initialise DB session.
-    # db_session = Session()
-
     # Check if admin is existed in db.
     file = db_session.query(File).filter_by(filepath=filepath).first()
 
