@@ -38,8 +38,8 @@ class UploadFile(Resource):
         file_size = str(round(file_length / (1024 * 1024), 2)) + "MB"
 
         # save file
-        file_storage_dir = current_app.config['UPLOAD_FOLDER']
-        file_path = os.path.join(file_storage_dir, secure_filename(filename))
+        upload_folder = current_app.config['UPLOAD_FOLDER']
+        file_path = os.path.join(upload_folder, secure_filename(filename))
         uploaded_file.save(file_path)
 
         return {

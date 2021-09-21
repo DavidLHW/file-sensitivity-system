@@ -13,8 +13,11 @@ def create_app():
     # Create a flask app.
     app = Flask(__name__)
 
-    APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-    UPLOAD_FOLDER = os.path.join(APP_ROOT, "/files")
+    APP_ROOT = os.path.abspath(os.path.dirname(__file__))
+    UPLOAD_FOLDER = os.path.join(APP_ROOT, "files")
+
+    if not os.path.exists(UPLOAD_FOLDER):
+        os.makedirs(UPLOAD_FOLDER)
 
     print(UPLOAD_FOLDER)
 
