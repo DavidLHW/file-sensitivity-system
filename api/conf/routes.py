@@ -1,6 +1,8 @@
 from flask_restful import Api
 
-from api.handlers.FileHandlers import UploadFile
+from api.handlers.FileHandlers import (
+    UploadFile,
+    ListFile)
 from api.handlers.UserHandlers import (
     Index,
     Login,
@@ -28,3 +30,6 @@ def generate_routes(app):
 
     # Get users page with admin permissions.
     api.add_resource(UploadFile, "/v1/upload")
+
+    # Get users page with admin permissions.
+    api.add_resource(ListFile, "/v1/files")
