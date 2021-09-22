@@ -112,11 +112,14 @@ class File(Base):
     # File path.
     filepath = Column(String)
 
-    # Uploaded time for file.
-    uploaded = Column(DateTime, default=datetime.utcnow)
-
     # File sensitivity score.
     score = Column(Integer, default=-1)
+
+    # Last updated time for file.
+    updated = Column(DateTime, default=datetime.utcnow)
+
+    # Uploaded time for file.
+    uploaded = Column(DateTime, default=datetime.utcnow)
 
     @staticmethod
     @auth.verify_token
