@@ -12,6 +12,7 @@ class FileSchema(Schema):
     filename = fields.Str()
     filesize = fields.Int(dump_only=True)
     filepath = fields.Str()
+    score = fields.Int(dump_only=True)
     uploaded = fields.DateTime()
 
     # Used to preserve ordering.

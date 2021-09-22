@@ -107,13 +107,16 @@ class File(Base):
     filename = Column(String(length=80))
 
     # File size in bytes.
-    filesize = Column(Integer())
+    filesize = Column(Integer)
 
     # File path.
-    filepath = Column(String())
+    filepath = Column(String)
 
     # Uploaded time for file.
     uploaded = Column(DateTime, default=datetime.utcnow)
+
+    # File sensitivity score.
+    score = Column(Integer, default=-1)
 
     @staticmethod
     @auth.verify_token
