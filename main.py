@@ -15,14 +15,12 @@ def create_app():
     # Create a flask app.
     app = Flask(__name__)
 
+    # Set file upload location
     APP_ROOT = os.path.abspath(os.path.dirname(__file__))
     UPLOAD_FOLDER = os.path.join(APP_ROOT, "files")
-
     if not os.path.exists(UPLOAD_FOLDER):
         os.makedirs(UPLOAD_FOLDER)
-
-    print(UPLOAD_FOLDER)
-
+        print(UPLOAD_FOLDER)
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
     # Set debug true for catching the errors.
