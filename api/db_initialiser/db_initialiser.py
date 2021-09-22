@@ -4,6 +4,7 @@ from api.models.models import Base
 from api.database.database import db_session, engine
 from api.models.models import User, File
 
+from sqlalchemy.orm.session import close_all_sessions
 
 def initialise_database(
     email="test_email@example.com",
@@ -16,10 +17,19 @@ def initialise_database(
     file = db_session.query(File).filter_by(filepath=filepath).first()
 
     if user and file:
+        print('DROPPING', user, file)
+        
+        # Closes all sessions
+        close_all_sessions()
+
+        # Drops the previously populated database on restart.
         Base.metadata.drop_all(engine)
+
+        # Creates new tables.
         Base.metadata.create_all(engine)
     
     else:
+        # Creates new tables.
         Base.metadata.create_all(engine)
 
 
