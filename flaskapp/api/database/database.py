@@ -7,7 +7,6 @@ from sqlalchemy.orm import sessionmaker
 
 from flaskapp.api.conf.config import DATABASE_URI
 
-
 # Engine object.
 engine = create_engine(DATABASE_URI)
 

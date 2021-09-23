@@ -8,11 +8,16 @@ from flaskapp.api.database.database import db_session, engine
 from flaskapp.api.models.models import User, File
 
 from sqlalchemy.orm.session import close_all_sessions
+from sqlalchemy_utils import database_exists, create_database
 
 def initialise_database(
     email="test_email@example.com",
     filepath="path/to/file/test.txt"
-):
+):    
+    # Create database if it doesn't exist.
+    if not database_exists(engine.url):
+        create_database(engine.url)
+
     try:
         # Check if admin is existed in db.
         user = db_session.query(User).filter_by(email=email).first()
@@ -27,7 +32,7 @@ def initialise_database(
     if user and file:
         print('DROPPING', user, file)
         
-        # Closes all sessions
+        # Closes all sessions.
         close_all_sessions()
 
         # Drops the previously populated database on restart.
@@ -39,6 +44,9 @@ def initialise_database(
     else:
         # Creates new tables.
         Base.metadata.create_all(engine)
+
+    # Closes all sessions once done.
+    close_all_sessions()
 
 
 

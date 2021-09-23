@@ -72,13 +72,13 @@ class UploadFile(Resource):
             # Commit session.
             db_session.commit()
 
-            # Close DB session to prevent memory leaks.
-            db_session.close()
-
         except Exception as why:
             # Log the error.
             logging.error(why)
             return error.INVALID_INPUT_422
+
+        # Close DB session to prevent memory leaks.
+        db_session.close()
 
         return {
             "filename":     filename,

@@ -80,8 +80,6 @@ def retrieve_task_results(delayed_results, data):
         # Retrieve result.
         results.append(result.get())
     
-    print(results)
-    
     return results
 
     
