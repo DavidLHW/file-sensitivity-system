@@ -13,6 +13,8 @@ from flaskapp.api.handlers.UserHandlers import (
     Logout,
     Register)
 
+def format_route_url(route):
+    return "/api/" + route
 
 def generate_routes(app):
 
@@ -24,16 +26,16 @@ def generate_routes(app):
     api.add_resource(Index, "/")
 
     # Register page.
-    api.add_resource(Register, "/v1/auth/register")
+    api.add_resource(Register, format_route_url("auth/register"))
 
     # Login page.
-    api.add_resource(Login, "/v1/auth/login")
+    api.add_resource(Login, format_route_url("auth/login"))
 
     # Logout page.
-    api.add_resource(Logout, "/v1/auth/logout")
+    api.add_resource(Logout, format_route_url("auth/logout"))
 
-    # Get users page with admin permissions.
-    api.add_resource(UploadFile, "/v1/upload")
+    # Get file page with auth.
+    api.add_resource(UploadFile, format_route_url("file"))
 
-    # Get users page with admin permissions.
-    api.add_resource(ListFile, "/v1/files")
+    # Get files page with auth.
+    api.add_resource(ListFile, format_route_url("files"))
