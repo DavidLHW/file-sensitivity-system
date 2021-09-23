@@ -6,6 +6,7 @@ sys.path.append("..")
 from flaskapp.api.models.models import Base
 from flaskapp.api.database.database import db_session, engine
 from flaskapp.api.models.models import User, File
+from flaskapp.api.conf.auth import generate_password_hash
 
 from sqlalchemy.orm.session import close_all_sessions
 from sqlalchemy_utils import database_exists, create_database
@@ -19,17 +20,17 @@ def initialise_database(
         create_database(engine.url)
 
     try:
-        # Check if admin is existed in db.
+        # Check if user exists in db.
         user = db_session.query(User).filter_by(email=email).first()
 
-        # Check if admin is existed in db.
+        # Check if user exists in db.
         file = db_session.query(File).filter_by(filepath=filepath).first()
 
     except:
         user = None
         file = None
 
-    if user and file:
+    if user or file:
         print('DROPPING', user, file)
         
         # Closes all sessions.
@@ -52,14 +53,14 @@ def initialise_database(
 
 def create_test_user(
     username="test_username",
-    password="test_password",
+    password=generate_password_hash("test_password"),
     email="test_email@example.com"
 ):
-    # Check if admin is existed in db.
+    # Check if user exists in db.
     user = db_session.query(User).filter_by(email=email).first()
 
     # If user is none.
-    if user is None:
+    if not user:
         # Create user if it does not exists.
         user = User(
             username=username,
@@ -93,11 +94,11 @@ def create_test_file(
     filesize=1024,
     filepath="path/to/file/test.txt"
 ):
-    # Check if admin is existed in db.
+    # Check if file exists in db.
     file = db_session.query(File).filter_by(filepath=filepath).first()
 
-    # If user is none.
-    if file is None:
+    # If file is none.
+    if not file:
 
         # Create File if it does not exist.
         file = File(

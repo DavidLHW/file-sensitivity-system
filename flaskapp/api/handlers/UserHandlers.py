@@ -7,9 +7,14 @@ from flask import request
 from flask_restful import Resource
 
 import flaskapp.api.error.errors as error
-from flaskapp.api.conf.auth import auth, refresh_jwt
 from flaskapp.api.database.database import db_session
 from flaskapp.api.models.models import User, Blacklist
+from flaskapp.api.conf.auth import (
+    auth,
+    refresh_jwt,
+    generate_password_hash,
+    check_password_hash
+)
 
 
 class Index(Resource):
@@ -38,23 +43,20 @@ class Register(Resource):
             return error.INVALID_INPUT_422
 
         # Check if any field is none.
-        if username is None or password is None or email is None:
+        if not (username and email and password):
             return error.INVALID_INPUT_422
 
-        # # Initialise DB session.
-        # db_session = Session()
-
-        # Get user if it is existed.
+        # Get user if user existsd.
         user = db_session.query(User).filter_by(email=email).first()
 
-        # Check if user is existed.
+        # Check if user exists.
         if user is not None:
             return error.ALREADY_EXIST
 
         # Create a new user.
         user = User(
                 username=username,
-                password=password,
+                password=generate_password_hash(password),
                 email=email)
 
         try:
@@ -96,20 +98,21 @@ class Login(Resource):
             return error.INVALID_INPUT_422
 
         # Check if user information is none.
-        if email is None or password is None:
+        if not(email and password):
             return error.INVALID_INPUT_422
 
         # # Initialise DB session.
         # db_session = Session()
 
-        # Get user if it is existed.
-        user = db_session.query(User).filter_by(email=email, password=password).first()
+        # Get user if it is exists.
+        user = db_session.query(User).filter_by(email=email).first()
 
         # Close DB session to prevent memory leaks.
         db_session.close()
 
-        # Check if user is not existed.
-        if user is None:
+        # If user does not exist or if incorrect password.
+        if not user or not check_password_hash(user.password, password):
+            print(user.password, password)
             return error.UNAUTHORIZED
 
         else:
@@ -140,7 +143,7 @@ class Logout(Resource):
         # Get if the refresh token is in blacklist.
         ref = db_session.query(Blacklist).filter_by(refresh_token=refresh_token).first()
 
-        # Check refresh token is existed.
+        # Check if refresh token exists.
         if ref is not None:
             return {"status": "already invalidated", "refresh_token": refresh_token}
 
@@ -176,7 +179,7 @@ class RefreshToken(Resource):
         # Close DB session to prevent memory leaks.
         db_session.close()
 
-        # Check refresh token is existed.
+        # Check if refresh token exists.
         if ref is not None:
 
             # Return invalidated token.
