@@ -8,9 +8,9 @@ sys.path.append("..")
 from tasks import group_calculate_score
 from tqdm import tqdm
 
-from api.models.models import File
-from api.database.database import db_session
-from api.schemas.schemas import FileSchema
+from flaskapp.api.models.models import File
+from flaskapp.api.database.database import db_session
+from flaskapp.api.schemas.schemas import FileSchema
 
 SCORE_MATRIX = json.load(open("scoreconfig.json"), encoding="utf8")
 

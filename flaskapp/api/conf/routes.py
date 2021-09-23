@@ -1,9 +1,13 @@
+import sys
+
+sys.path.append("..")
+
 from flask_restful import Api
 
-from api.handlers.FileHandlers import (
+from flaskapp.api.handlers.FileHandlers import (
     UploadFile,
     ListFile)
-from api.handlers.UserHandlers import (
+from flaskapp.api.handlers.UserHandlers import (
     Index,
     Login,
     Logout,

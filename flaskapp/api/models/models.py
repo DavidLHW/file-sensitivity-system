@@ -1,11 +1,14 @@
 from datetime import datetime
+import sys
+
+sys.path.append("..")
 
 from flask import g
 
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 
-from api.conf.auth import auth, jwt
+from flaskapp.api.conf.auth import auth, jwt
 
 # Create sql alchemy database object.
 Base = declarative_base()

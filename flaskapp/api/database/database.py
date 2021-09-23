@@ -1,7 +1,11 @@
+import sys
+
+sys.path.append("..")
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from api.conf.config import DATABASE_URI
+from flaskapp.api.conf.config import DATABASE_URI
 
 
 # Engine object.

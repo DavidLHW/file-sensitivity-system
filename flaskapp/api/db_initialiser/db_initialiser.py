@@ -1,14 +1,17 @@
 import logging
+import sys
 
-from api.models.models import Base
-from api.database.database import db_session, engine
-from api.models.models import User, File
+sys.path.append("..")
+
+from flaskapp.api.models.models import Base
+from flaskapp.api.database.database import db_session, engine
+from flaskapp.api.models.models import User, File
 
 from sqlalchemy.orm.session import close_all_sessions
 
 def initialise_database(
     email="test_email@example.com",
-    filepath="path/to/file/text.txt"
+    filepath="path/to/file/test.txt"
 ):
     try:
         # Check if admin is existed in db.

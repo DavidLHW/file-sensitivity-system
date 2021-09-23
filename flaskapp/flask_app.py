@@ -17,7 +17,7 @@ def create_app():
 
     # Set file upload location
     APP_ROOT = os.path.abspath(os.path.dirname(__file__))
-    UPLOAD_FOLDER = os.path.join(APP_ROOT, "files")
+    UPLOAD_FOLDER = os.path.join(APP_ROOT, os.pardir, "files")
     if not os.path.exists(UPLOAD_FOLDER):
         os.makedirs(UPLOAD_FOLDER)
         print("UPLOAD FOLDER: ", UPLOAD_FOLDER)

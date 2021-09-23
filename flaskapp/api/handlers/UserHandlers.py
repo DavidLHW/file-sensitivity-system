@@ -1,12 +1,15 @@
 import logging
+import sys
+
+sys.path.append("..")
 
 from flask import request
 from flask_restful import Resource
 
-import api.error.errors as error
-from api.conf.auth import auth, refresh_jwt
-from api.database.database import db_session
-from api.models.models import User, Blacklist
+import flaskapp.api.error.errors as error
+from flaskapp.api.conf.auth import auth, refresh_jwt
+from flaskapp.api.database.database import db_session
+from flaskapp.api.models.models import User, Blacklist
 
 
 class Index(Resource):
