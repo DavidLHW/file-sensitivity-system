@@ -10,11 +10,16 @@ def initialise_database(
     email="test_email@example.com",
     filepath="path/to/file/text.txt"
 ):
-    # Check if admin is existed in db.
-    user = db_session.query(User).filter_by(email=email).first()
+    try:
+        # Check if admin is existed in db.
+        user = db_session.query(User).filter_by(email=email).first()
 
-    # Check if admin is existed in db.
-    file = db_session.query(File).filter_by(filepath=filepath).first()
+        # Check if admin is existed in db.
+        file = db_session.query(File).filter_by(filepath=filepath).first()
+
+    except:
+        user = None
+        file = None
 
     if user and file:
         print('DROPPING', user, file)
@@ -41,8 +46,6 @@ def create_test_user(
 ):
     # Check if admin is existed in db.
     user = db_session.query(User).filter_by(email=email).first()
-
-    print(user)
 
     # If user is none.
     if user is None:
@@ -77,12 +80,10 @@ def create_test_user(
 def create_test_file(
     filename="test_file",
     filesize=1024,
-    filepath="path/to/file/text.txt"
+    filepath="path/to/file/test.txt"
 ):
     # Check if admin is existed in db.
     file = db_session.query(File).filter_by(filepath=filepath).first()
-
-    print(file)
 
     # If user is none.
     if file is None:

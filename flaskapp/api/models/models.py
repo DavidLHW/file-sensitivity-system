@@ -116,10 +116,7 @@ class File(Base):
     score = Column(Integer, default=-1)
 
     # Last updated time for file.
-    updated = Column(DateTime, default=datetime.utcnow)
-
-    # Uploaded time for file.
-    uploaded = Column(DateTime, default=datetime.utcnow)
+    last_updated = Column(DateTime, default=datetime.utcnow)
 
     @staticmethod
     @auth.verify_token
@@ -151,10 +148,10 @@ class File(Base):
     def __repr__(self):
 
         # This is only for representation how you want to see after query.
-        return "<File(id='%s', name='%s', size='%s', path='%s', uploaded='%s')>" % (
+        return "<File(id='%s', name='%s', size='%s', path='%s', last_updated='%s')>" % (
             self.id,
             self.filename,
             self.filesize,
             self.filepath,
-            self.uploaded,
+            self.last_updated,
         )

@@ -1,6 +1,5 @@
 import logging
 import os
-from datetime import datetime
 
 from flask import request, current_app
 from flask_restful import Resource
@@ -84,8 +83,6 @@ class ListFile(Resource):
     def get(self):
         # retrieve file from DB
         files = db_session.query(File).all()
-        
-        print(files)
 
         try:
             # return files
