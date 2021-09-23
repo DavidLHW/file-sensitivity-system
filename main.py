@@ -20,7 +20,7 @@ def create_app():
     UPLOAD_FOLDER = os.path.join(APP_ROOT, "files")
     if not os.path.exists(UPLOAD_FOLDER):
         os.makedirs(UPLOAD_FOLDER)
-        print(UPLOAD_FOLDER)
+        print("UPLOAD FOLDER: ", UPLOAD_FOLDER)
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
     # Set debug true for catching the errors.
