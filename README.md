@@ -194,3 +194,19 @@ To initialise Celery app to calculate scores of all files in db, execute the fol
 ``` bash
 python ./celery_app.py
 ```
+
+## View results on Postgres
+
+Launch pgAdmin4 and navigate to database (default = `file_sensitivity_system_db`)
+
+Query the following under public schemas to get users table.
+
+``` SQL
+SELECT * FROM public.users
+```
+
+Query the following under public schemas to get files table.
+
+``` SQL
+SELECT * FROM public.files
+```
