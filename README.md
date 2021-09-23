@@ -73,8 +73,140 @@ Total sensitivity score = 10 + 3 + 7 = 20
 
 ### Prerequisites
 
+This project is run on python 3.8.10 and postgres 13.4.
+
 ### Installation
 
-## Usage
+Clone repository.
 
-### Example
+``` bash
+git clone https://github.com/DavidLHW/file-sensitivity-system.git
+```
+
+Install dependencies.
+
+``` bash
+pip install -r requirements.txt
+```
+
+### Source Tree
+``` bash
+.
+├── flaskapp/
+│   ├── flask_app.py
+│   └──  api/
+│       ├── conf/
+│       ├── database/
+│           └── ...
+│       └── .../
+│           └── ...
+├── celeryapp/
+│   ├── celery_app.py
+│   ├── celeryconfig.py
+│   ├── tasks.py
+│   ├── scoreconfig.json
+│   └── ...
+└── files/
+    ├── UPLOADED_FILE_1.txt
+    ├── UPLOADED_FILE_2.txt
+    ├── UPLOADED_FILE_3.txt
+    └── ...
+```
+
+
+## Flask App Usage
+
+A simple web app that exposes REST API.
+
+Navigate to ./flaskapp
+
+To initialise the app, execute the following command.
+
+``` bash
+python ./flask_app.py
+```
+
+### Routes
+
+PROJECT_URL is default to localhost:5000
+
+Register a new user.
+
+``` curl
+curl --location --request POST 'http://PROJECT_URL/api/auth/register' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer ACCESS_TOKEN' \
+--data-raw '{
+  "username":"test_user",
+  "email":"test_email@example.com",
+  "password":"test_password"
+}'
+```
+
+Login to an existing user account.
+
+``` curl
+curl --location --request POST 'http://PROJECT_URL/api/auth/login' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer ACCESS_TOKEN' \
+--data-raw '{
+  "email":"test_email@example.com",
+  "password":"test_password"
+}'
+```
+
+Logout of an existing session.
+
+``` curl
+curl -H "Content-Type: application/json" \
+--header "Authorization: Bearer ACCESS_TOKEN" \
+--data '{"refresh_token":"REFRESH_TOKEN"}' \
+http://localhost:5000/api/auth/logout
+```
+
+Upload file to app.
+
+``` curl
+curl --location --request POST 'http://PROJECT_URL/api/file' \
+--header 'Authorization: Bearer ACCESS_TOKEN' \
+--form 'file=@"/C:/path/to/file/text.txt"'
+```
+
+Get all file information.
+
+``` curl
+curl --location --request GET 'http://PROJECT_URL/api/files' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer ACCESS_TOKEN'
+```
+
+## Celery App Usage
+
+Navigate to ./celeryapp
+
+To initialise the Celery worker, execute the following command.
+``` bash
+celery -A tasks worker --pool=solo -l info
+```
+
+To initialise Celery app to calculate scores of all files in db, execute the following command.
+
+``` bash
+python ./celery_app.py
+```
+
+## View results on Postgres
+
+Launch pgAdmin4 and navigate to database (default = `file_sensitivity_system_db`)
+
+Query the following under public schemas to get users table.
+
+``` SQL
+SELECT * FROM public.users
+```
+
+Query the following under public schemas to get files table.
+
+``` SQL
+SELECT * FROM public.files
+```
