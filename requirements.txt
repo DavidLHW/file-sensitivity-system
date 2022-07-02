@@ -6,5 +6,5 @@ marshmallow==3.11.1
 Werkzeug==1.0.1
 SQLAlchemy==1.4.10
 SQLAlchemy_Utils==0.37.8
-celery==5.1.2
+celery==5.2.2
 tqdm==4.60.0
